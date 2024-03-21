@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 600px;
+            text-align: center;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: aliceblue;
+        }
+        
+        input[type="text"] {
+            width: 70%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        .task .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .task.completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <input type="text" id="taskInput" placeholder="Add a new task">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+    <script>
+        let tasks = [];
+
+function renderTasks() {
+    const taskList = document.getElementById('taskList');
+    taskList.innerHTML = '';
+
+    tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = `task ${task.completed ? 'completed' : ''}`;
+        li.innerHTML = `
+            <span>${task.title}</span>
+            <div class="actions">
+                <button onclick="toggleTaskStatus(${index})">${task.completed ? 'Activate' : 'Complete'}</button>
+                <button onclick="editTask(${index})">Edit</button>
+                <button onclick="deleteTask(${index})">Delete</button>
+            </div>
+        `;
+        taskList.appendChild(li);
+    });
+}
+
+function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const taskTitle = taskInput.value.trim();
+
+    if (taskTitle !== '') {
+        tasks.push({ title: taskTitle, completed: false });
+        taskInput.value = '';
+        renderTasks();
+    }
+}
+
+function editTask(index) {
+    const newTitle = prompt('Enter new task title:');
+    if (newTitle !== null && newTitle.trim() !== '') {
+        tasks[index].title = newTitle.trim();
+        renderTasks();
+    }
+}
+
+function toggleTaskStatus(index) {
+    tasks[index].completed = !tasks[index].completed;
+    renderTasks();
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    renderTasks();
+}
+
+window.onload = renderTasks;
+
+    </script>
+</body>
+</html>
